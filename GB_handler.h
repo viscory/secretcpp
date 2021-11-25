@@ -48,21 +48,10 @@ public:
 	void display(int i) const;		//display a grade book in the list
 	void delGradeBook(int i); 			//delete the i th grade book from the list
 
-	void nameSort();		//sort based on the names in ascending order
-	void emailSort();		//sort based on the emails in ascending order
-	void idSort();		//sort based on the ids in ascending order 
-
 	int findName(const char *nn);		//find a name from the list, -1 means not found
 	int findEmail(const char *em);	//find an email from the list, -1 means not found
 	int findID(const char *nn);		//find a student id from the list, -1 means not found
 
 	void input();			//Task 0, input grade book to the list
-
-	void delGradeBook();			//Task 1, delete a grade book from the list based on user input of name, email, or ID.  
-
-	void sortGradeBook();			//Task 2, sort in ascending order based on user input of name, email, or ID.  
-
-	void avgGrade();		//Task 3, calculation of average grade of each student grade book marks
-
-	void searchGradeBook();		//Task 4, search of students?record based on user input of name, email, or ID.  
+    void verify();         // actually Task 0
 };

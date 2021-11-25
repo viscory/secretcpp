@@ -133,76 +133,15 @@ void GradeBookHandle::delGradeBook(int i)
 {
 	if (i<nEm)
 	{
-		list[nEm] = 
+		GradeBook tmp;
         for (int k=i+1; k<nEm; k++) list[k-1] = list[k];
+        list[nEm-1] = tmp; 
 		nEm--;
 	}
 	else cout << "No such grade book!\a\n";
 
 }
 
-//sort based on name in ascending order 
-void GradeBookHandle::nameSort()
-{
-	GradeBook temp;
-	bool exchanged;
-	
-	do 
-	{
-		exchanged = false;
-		for (int i=1; i<nEm; i++)
-			if (strcmp(list[i].getName(),list[i-1].getName()) < 0) //not in order
-			{
-				temp = list[i-1];			//exchange two grade books
-				list[i-1] = list[i];
-				list[i] = temp;
-				exchanged = true;
-			}
-	}
-	while(exchanged);
-}
-
-//sort based on email in ascending order 
-void GradeBookHandle::emailSort()
-{
-	GradeBook temp;
-	bool exchanged;
-	
-	do 
-	{
-		exchanged = false;
-		for (int i=1; i<nEm; i++)
-			if (strcmp(list[i].getEmail(),list[i-1].getEmail()) < 0)
-			{
-				temp = list[i-1];		//exchange two grade books
-				list[i-1] = list[i];
-				list[i] = temp;
-				exchanged = true;
-			}
-	}
-	while(exchanged);
-}
-
-//sort based on id in ascending order 
-void GradeBookHandle::idSort()
-{
-	GradeBook temp;
-	bool exchanged;
-	
-	do 
-	{
-		exchanged = false;
-		for (int i=1; i<nEm; i++)
-			if (strcmp(list[i].getID(),list[i-1].getID()) < 0)
-			{
-				temp = list[i-1];		//exchange two grade books
-				list[i-1] = list[i];
-				list[i] = temp;
-				exchanged = true;
-			}
-	}
-	while(exchanged);
-}
 
 //check if the input is an alphabet
 bool isLetter(char c)
@@ -216,7 +155,7 @@ bool isNumber(char c)
 	return c>='0' && c<='9';
 }
 
-int checkName(char name[100])
+int checkName(char* name)
 {
     int len=strlen(name);
     if (len==0) { cin.getline(name, 100); len=strlen(name); }
@@ -228,23 +167,10 @@ int checkName(char name[100])
         else if (!isLetter(name[i])) {onlyLetter = false; break;}
     }
     if (!noSpace && onlyLetter) return 1;
-    return 0
+    return 0;
 }
 
-//input student name and check the format
-char* inputName()
-{
-	static char name[100];
-	while(true)
-	{
-		cout << "Name = ";
-		cin.getline(name, 100);
-		if (checkName(name)) return name;
-        cout << "Illegal input!\a\n";
-    }
-}
-
-int checkEmail(char email[100])
+int checkEmail(char* email)
 {
     int len=strlen(email);
     if (len==0) { cin.getline(email, 100); len=strlen(email); }
@@ -272,8 +198,41 @@ int checkEmail(char email[100])
     return 0;
 }
 
+int checkID(char* id)
+{
+    int len=strlen(id);
+    if (len==0) { cin.getline(id, 100); len=strlen(id); }
+
+    bool nok=false;	
+    for (int i=0; i<8; i++)
+        if ( !isNumber(id[i]) ){ nok = true; break; }
+
+    if (!nok && len==9 && (id[8]=='D'||id[8]=='d')) return 1;
+    return 0;
+}
+
+
+int checkMark(int mark)
+{
+    if (mark>=0 && mark <=100) return 1;
+    return 0;
+}
+
+//input student name and check the format
+const char* inputName()
+{
+	static char name[100];
+	while(true)
+	{
+		cout << "Name = ";
+		cin.getline(name, 100);
+		if (checkName(name)) return name;
+        cout << "Illegal input!\a\n";
+    }
+}
+
 //input student email and check the format
-char* inputEmail()
+const char* inputEmail()
 {
 	static char email[100];
 	while(true)
@@ -285,21 +244,8 @@ char* inputEmail()
 	}
 }
 
-int checkID(char id[100])
-{
-    int len=strlen(id);
-    if (len==0) { cin.getline(id, 100); len=strlen(id); }
-
-    bool nok=false;	
-    for (int i=0; i<8; i++)
-        if ( !isNumber(id[i]) ){ nok = true; break; }
-
-    if (!nok && len==9 && (id[8]=='D'||id[8]=='d')) return 1;
-    return 0
-}
-
 //input student id and check the format
-char* inputID()
+const char* inputID()
 {
 	static char id[100];
 	while(true)
@@ -309,12 +255,6 @@ char* inputID()
 		if (checkID(id)) return id;
         cout << "Illegal input!\a\n";
 	}
-}
-
-int checkMark()
-{
-    if (mark>=0 && mark <=100) return 1;
-    return 0;
 }
 
 //input quiz mark
@@ -359,36 +299,19 @@ void GradeBookHandle::input()
 */
 }
 
-int verifyName(GradeBook book)
-{
-
-}
-
-int verifyID(GradeBook book)
-{
-
-}
-
-int verifyEmail(GradeBook book)
-{
-
-}
-
-int verifyMarks(GradeBook book)
-{
-    if 
-}
-
-void GuideBookHandle::verify()
+void GradeBookHandle::verify()
 {
     for(int i=0; i<nEm; i++)
     {
-        if (!checkName(list[i].getName())) list[i].setName(); 
-        if (!checkID(list[i].getID())) list[i].setID(); 
-        if (!checkEmail(list[i].getEmail())) list[i].setEmail(); 
-        if (!checkMark(list[i].getName())) list[i].setName(); 
+        if (!checkName(list[i].getName())) list[i].inputName(); 
+        if (!checkID(list[i].getID())) list[i].inputID(); 
+        if (!checkEmail(list[i].getEmail())) list[i].inputEmail(); 
+        for (int j=0; j<3; j++){
+            if (!checkMark(list[i].getMark(i))) list[i].setMark(i, inputMark()); 
+        }
     }
-}
+}    
+
 
 char uMenu()
 {
@@ -403,82 +326,4 @@ char uMenu()
 		if (c<'1' || c>'3') cout << "Illegal choice!\a\n";
 		else return c;
 	}
-}
-
-//Task 1, delete a grade book from the list based on user𠏋 input of name, email, or ID.  
-void GradeBookHandle::delGradeBook()
-{
-	int i;
-	cout << "Deletion of grade book\n";
-	switch(uMenu())
-	{
-	  case '1': i = findName(inputName());
-				break;
-	  case '2': i = findEmail(inputEmail());
-				break;
-	  case '3': i = findID(inputID());
-	}
-	if (i<0) cout << "No such grade book!\a\n";
-	else delGradeBook(i);
-}
-
-//Task 2, sort in ascending order based on user𠏋 input of name, email, or ID.  
-void GradeBookHandle::sortGradeBook()
-{
-	cout << "Sorting of grade book\n";
-	switch(uMenu())
-	{
-	  case '1': nameSort();
-				break;
-	  case '2': emailSort();
-				break;
-	  case '3': idSort();
-	}
-	display(); //display all
-}
-
-char* toGrade(const int marks[])
-{
-	double avg = 0;
-	for (int i=0; i<3; i++) avg += marks[i];
-	avg /= 3;
-
-	static char grade[3]={};
-	if (avg >= 90.5) { grade[0]='A'; grade[1]='+'; }
-	else if (avg >= 80.5) grade[0]='A'; 
-	else if (avg >= 70.5) { grade[0]='B'; grade[1]='+'; }
-	else if (avg >= 60.5) grade[0]='B';
-	else if (avg >= 53.5) {grade[0]='C'; grade[1]='+';}
-	else if (avg >= 46.5) grade[0]='C';
-	else if (avg >= 53.5) {grade[0]='D'; grade[1]='+';}
-	else if (avg >= 34.5) grade[0]='D';
-	else grade[0]='F'; 
-
-	return grade;
-}
-
-//Task 3, calculation of average grade of each student grade book𠏋 marks
-void GradeBookHandle::avgGrade()
-{
-	cout << "Calculation of average grade\n";
-	for (int i=0; i<nEm; i++)
-		cout << "Average grade of student " << i << " is " << toGrade(list[i].getMarks()) << endl;
-}
-
-//Task 4, search of students?record based on user𠏋 input of name, email, or ID.  
-void GradeBookHandle::searchGradeBook()
-{
-	int i;
-	cout << "Search of grade book\n";
-	switch(uMenu())
-	{
-	  case '1': i = findName(inputName());
-				break;
-	  case '2': i = findEmail(inputEmail());
-				break;
-	  case '3': i = findID(inputID());
-	}
-	if (i<0) cout << "No such grade book!\a\n";
-	else display(i);	//display the i th grade book
-
 }
