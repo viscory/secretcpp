@@ -3,8 +3,6 @@
 #include <iostream>
 using namespace std;
 
-//Implementation of GB_hander class
-
 //constructor for setting data to zero
 GradeBook::GradeBook()
 {
@@ -99,7 +97,7 @@ void GradeBookHandle::display(int i) const
 {
 	if (i<nEm)
 	{
-		list[i].display();
+	    list[i].display();
 	}
 }
 
@@ -135,7 +133,8 @@ void GradeBookHandle::delGradeBook(int i)
 {
 	if (i<nEm)
 	{
-		for (int k=i+1; k<nEm; k++) list[k-1] = list[k];
+		list[nEm] = 
+        for (int k=i+1; k<nEm; k++) list[k-1] = list[k];
 		nEm--;
 	}
 	else cout << "No such grade book!\a\n";
@@ -217,6 +216,21 @@ bool isNumber(char c)
 	return c>='0' && c<='9';
 }
 
+int checkName(char name[100])
+{
+    int len=strlen(name);
+    if (len==0) { cin.getline(name, 100); len=strlen(name); }
+
+    bool noSpace = true, onlyLetter=true;
+    for (int i=0; i<len; i++)
+    {
+        if (name[i]==' ') noSpace = false;
+        else if (!isLetter(name[i])) {onlyLetter = false; break;}
+    }
+    if (!noSpace && onlyLetter) return 1;
+    return 0
+}
+
 //input student name and check the format
 char* inputName()
 {
@@ -225,18 +239,37 @@ char* inputName()
 	{
 		cout << "Name = ";
 		cin.getline(name, 100);
-		int len=strlen(name);
-		if (len==0) { cin.getline(name, 100); len=strlen(name); }
+		if (checkName(name)) return name;
+        cout << "Illegal input!\a\n";
+    }
+}
 
-		bool noSpace = true, onlyLetter=true;
-		for (int i=0; i<len; i++)
-		{
-			if (name[i]==' ') noSpace = false;
-			else if (!isLetter(name[i])) {onlyLetter = false; break;}
-		}
-		if (!noSpace && onlyLetter) return name;
-		cout << "Illegal input!\a\n";
-	}
+int checkEmail(char email[100])
+{
+    int len=strlen(email);
+    if (len==0) { cin.getline(email, 100); len=strlen(email); }
+
+    bool nok=false;	
+    char c;
+    int nat=0, ndot=0; 
+
+    if (isLetter(email[0]) && email[len-1]!='.')
+    {
+
+        for (int i=1; i<len; i++)
+        {
+            c = email[i];
+            if (nat == 1 && c=='.') ndot++;
+
+            if (c=='@' && ++nat >1){ nok = true; break; }
+
+            if (c!='.' && c!='@' && c!='_' && c!='-' && !isLetter(c) && !isNumber(c)) {nok = true; break;}
+        }
+    }
+    else nok = true;
+
+    if (!nok && ndot>0) return 1;
+    return 0;
 }
 
 //input student email and check the format
@@ -247,31 +280,22 @@ char* inputEmail()
 	{
 		cout << "Email = ";
 		cin.getline(email, 100);
-		int len=strlen(email);
-		if (len==0) { cin.getline(email, 100); len=strlen(email); }
-
-		bool nok=false;	
-		char c;
-		int nat=0, ndot=0; 
-
-		if (isLetter(email[0]) && email[len-1]!='.')
-		{
-
-			for (int i=1; i<len; i++)
-			{
-				c = email[i];
-				if (nat == 1 && c=='.') ndot++;
-
-				if (c=='@' && ++nat >1){ nok = true; break; }
-
-     			if (c!='.' && c!='@' && c!='_' && c!='-' && !isLetter(c) && !isNumber(c)) {nok = true; break;}
-			}
-		}
-		else nok = true;
-
-		if (!nok && ndot>0) return email;
-		cout << "Illegal input!\a\n";
+		if (checkEmail(email)) return email;
+        cout << "Illegal input!\a\n";
 	}
+}
+
+int checkID(char id[100])
+{
+    int len=strlen(id);
+    if (len==0) { cin.getline(id, 100); len=strlen(id); }
+
+    bool nok=false;	
+    for (int i=0; i<8; i++)
+        if ( !isNumber(id[i]) ){ nok = true; break; }
+
+    if (!nok && len==9 && (id[8]=='D'||id[8]=='d')) return 1;
+    return 0
 }
 
 //input student id and check the format
@@ -282,16 +306,15 @@ char* inputID()
 	{
 		cout << "ID = ";
 		cin.getline(id, 100);
-		int len=strlen(id);
-		if (len==0) { cin.getline(id, 100); len=strlen(id); }
-
-		bool nok=false;	
-		for (int i=0; i<8; i++)
-			if ( !isNumber(id[i]) ){ nok = true; break; }
-
-		if (!nok && len==9 && (id[8]=='D'||id[8]=='d')) return id;
-		cout << "Illegal input!\a\n";
+		if (checkID(id)) return id;
+        cout << "Illegal input!\a\n";
 	}
+}
+
+int checkMark()
+{
+    if (mark>=0 && mark <=100) return 1;
+    return 0;
 }
 
 //input quiz mark
@@ -300,9 +323,10 @@ int inputMark()
 	int mark;
 	while(true)
 	{
-		cout << "Mark = "; cin >> mark;
-		if (mark>=0 && mark <=100) return mark;
-		cout << "Illegal input!\a\n";
+		cout << "Mark = ";
+        cin >> mark;
+		if (checkMark(mark)) return mark;
+        cout << "Illegal input!\a\n";
 	}
 }
 
@@ -333,6 +357,37 @@ void GradeBookHandle::input()
 	list[nEm].setMark(0, 50 ); list[nEm].setMark(1, 60 ); list[nEm].setMark(2, 70 );
 	nEm++;
 */
+}
+
+int verifyName(GradeBook book)
+{
+
+}
+
+int verifyID(GradeBook book)
+{
+
+}
+
+int verifyEmail(GradeBook book)
+{
+
+}
+
+int verifyMarks(GradeBook book)
+{
+    if 
+}
+
+void GuideBookHandle::verify()
+{
+    for(int i=0; i<nEm; i++)
+    {
+        if (!checkName(list[i].getName())) list[i].setName(); 
+        if (!checkID(list[i].getID())) list[i].setID(); 
+        if (!checkEmail(list[i].getEmail())) list[i].setEmail(); 
+        if (!checkMark(list[i].getName())) list[i].setName(); 
+    }
 }
 
 char uMenu()
