@@ -303,9 +303,9 @@ void GradeBookHandle::verify()
 {
     for(int i=0; i<nEm; i++)
     {
-        if (!checkName(list[i].getName())) list[i].inputName(); 
-        if (!checkID(list[i].getID())) list[i].inputID(); 
-        if (!checkEmail(list[i].getEmail())) list[i].inputEmail(); 
+        if (!checkName((char*)list[i].getName())) list[i].setName(inputName()); 
+        if (!checkID((char*)list[i].getID())) list[i].setID(inputID()); 
+        if (!checkEmail((char*)list[i].getEmail())) list[i].setEmail(inputEmail()); 
         for (int j=0; j<3; j++){
             if (!checkMark(list[i].getMark(i))) list[i].setMark(i, inputMark()); 
         }
