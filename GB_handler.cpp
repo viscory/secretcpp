@@ -1,6 +1,7 @@
 #include "GB_handler.h"
 #include <cstring>
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 //constructor for setting data to zero
@@ -69,11 +70,10 @@ const int* GradeBook::getMarks() const
 //display the grade book
 void GradeBook::display() const
 {
-	cout << "------------------------------------------\n";
-	cout << "|Name: " << sName << endl;
-	cout << "|Email:" << sEmail << endl;
-	cout << "|ID:   " << sIDno << endl;
-	cout << "|Marks:" << sMarks[0] << ", " << sMarks[1] << ", " << sMarks[2] << endl;
+	cout << "|Name:  " << sName << endl;
+	cout << "|Email: " << sEmail << endl;
+	cout << "|ID:    " << sIDno << endl;
+	cout << "|Marks: " << sMarks[0] << ", " << sMarks[1] << ", " << sMarks[2] << endl;
 	cout << "------------------------------------------\n";
 }
 
@@ -89,12 +89,14 @@ GradeBookHandle::GradeBookHandle()
 //display all grade books in the list
 void GradeBookHandle::display() const
 {
+	cout << "------------------------------------------\n";
 	for (int i=0; i<nEm; i++) display(i);
 }
 
 //display the i th grade book in the list
 void GradeBookHandle::display(int i) const
 {
+	cout << "------------------------------------------\n";
 	if (i<nEm)
 	{
 	    list[i].display();
@@ -273,12 +275,12 @@ int inputMark()
 //Task 0, input grade book to the list
 void GradeBookHandle::input()
 {
-	list[nEm].setName( inputName() );
-	list[nEm].setEmail( inputEmail() );
-	list[nEm].setID( inputID() );
-	for (int i=0; i<3; i++) list[nEm].setMark(i, inputMark() );
-	nEm++;
-/*
+    //list[nEm].setName( inputName() );
+	//list[nEm].setEmail( inputEmail() );
+	//list[nEm].setID( inputID() );
+	//for (int i=0; i<3; i++) list[nEm].setMark(i, inputMark() );
+	//nEm++;
+
 	list[nEm].setName( "Peter Lee" );		//preset data
 	list[nEm].setEmail( "p@peter.lee" );
 	list[nEm].setID( "12345678D" );
@@ -286,7 +288,7 @@ void GradeBookHandle::input()
 	nEm++;
 
 	list[nEm].setName( "Mary Lie" );
-	list[nEm].setEmail( "m@lie.org" );
+	list[nEm].setEmail( "mlie.org" );
 	list[nEm].setID( "12345675D" );
 	list[nEm].setMark(0, 100 ); list[nEm].setMark(1, 90 ); list[nEm].setMark(2, 80 );
 	nEm++;
@@ -296,22 +298,87 @@ void GradeBookHandle::input()
 	list[nEm].setID( "12345679D" );
 	list[nEm].setMark(0, 50 ); list[nEm].setMark(1, 60 ); list[nEm].setMark(2, 70 );
 	nEm++;
-*/
+
 }
 
 void GradeBookHandle::verify()
 {
     for(int i=0; i<nEm; i++)
     {
-        if (!checkName((char*)list[i].getName())) list[i].setName(inputName()); 
-        if (!checkID((char*)list[i].getID())) list[i].setID(inputID()); 
-        if (!checkEmail((char*)list[i].getEmail())) list[i].setEmail(inputEmail()); 
+        if (!checkName((char*)list[i].getName()))
+        {
+            list[i].display();
+            cout << "Error in Name" << endl;
+            list[i].setName(inputName()); 
+        }
+        if (!checkID((char*)list[i].getID()))
+        {
+            list[i].display();
+            cout << "Error in ID" << endl;
+            list[i].setID(inputID()); 
+        }
+        if (!checkEmail((char*)list[i].getEmail()))
+        {
+            list[i].display();
+            cout << "Error in Email" << endl;
+            list[i].setEmail(inputEmail()); 
+        }
         for (int j=0; j<3; j++){
-            if (!checkMark(list[i].getMark(i))) list[i].setMark(i, inputMark()); 
+            if (!checkMark(list[i].getMark(i)))
+            {
+                list[i].display();
+                cout << "Error in Mark " << j << endl;
+                list[i].setMark(i, inputMark()); 
+            }
         }
     }
-}    
+}
 
+void GradeBookHandle::store(char* filename)
+{
+    ofstream push(filename);
+    for(int i=0; i<nEm; i++)
+    {
+        push<<list[i].getName()<<" ";
+        push<<list[i].getID()<<" ";
+        push<<list[i].getEmail()<<" ";
+        push<<list[i].getMark(0)<<" ";
+        push<<list[i].getMark(1)<<" ";
+        push<<list[i].getMark(2)<<endl;
+    }
+}
+
+void GradeBookHandle::load(char* filename)
+{
+    int counter=0;
+	char name[100], id[10], email[100];	//array of characters
+	int marks[3];
+    
+    ifstream pull(filename, ios::in);
+    if (!pull) {
+        cout<<"Database File not exist!"<<endl;
+        return;
+    }
+    while(true)
+    {
+        if(!pull.good()) break;
+        
+        pull>>name;
+        pull>>id;
+        pull>>email;
+        pull>>marks[0];
+        pull>>marks[1];
+        pull>>marks[2];
+        cout << "Test" <<endl;
+        list[counter].setName(name);
+        list[counter].setID(id);
+        list[counter].setEmail(email);
+        list[counter].setMark(0, marks[0]);
+        list[counter].setMark(1, marks[1]);
+        list[counter].setMark(2, marks[2]);
+        counter++;
+    }
+}
 
 char uMenu()
 {

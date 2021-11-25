@@ -54,4 +54,7 @@ public:
 
 	void input();			//Task 0, input grade book to the list
     void verify();         // actually Task 0
+
+    void load(char* filename);
+    void store(char* filename);
 };

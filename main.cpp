@@ -1,10 +1,23 @@
 #include "GB_handler.h"
-
+#include "GB_auth.h"
 int main()
 {
-	GradeBookHandle gbh;
+    
+    GradeBookHandle gbh;
+    Authenticator auth;
+    int loginStatus=0;
 
-	// Task 0
-    gbh.input(); gbh.display();
+    while(true)
+    {
+        loginStatus=auth.authenticate();
+        if (loginStatus==-1) break;
+        if (loginStatus==0) continue;
+        //gbh.input();
+        gbh.load("grades.db"); 
+        //gbh.store("grades.db"); 
+        gbh.display(); 
+        break;
+
+    }
 }
 
