@@ -74,7 +74,7 @@ void GradeBook::display() const
 	cout << "|Email:  " << sEmail << endl;
 	cout << "|ID:     " << sIDno << endl;
 	cout << "|Marks:  " << sMarks[0] << ", " << sMarks[1] << ", " << sMarks[2] << endl;
-	cout << "------------------------------------------\n";
+	cout << "------------------------------------------" << endl;
 }
 
 
@@ -89,7 +89,9 @@ GradeBookHandle::GradeBookHandle()
 //display all grade books in the list
 void GradeBookHandle::display() const
 {
-	cout << "------------------------------------------\n";
+	cout << "------------------------------------------"<<endl;
+	cout << "            Showing...."<<endl;
+	cout << "------------------------------------------"<<endl;
 	for (int i=0; i<nEm; i++) display(i);
 }
 
@@ -98,7 +100,7 @@ void GradeBookHandle::display(int i) const
 {
 	if (i<nEm)
 	{
-	    cout << "------------------------------------------\n";
+	    cout << "------------------------------------------"<<endl;
 	    cout << "|Serial: " << i << endl;
 	    list[i].display();
 	}
@@ -114,7 +116,7 @@ void GradeBookHandle::delGradeBook(int i)
         list[nEm-1] = tmp; 
 		nEm--;
 	}
-	else cout << "No such grade book!\a\n";
+	else cout << "No such grade book!" << endl;
 
 }
 
@@ -200,10 +202,10 @@ const char* inputName()
 	static char name[100];
 	while(true)
 	{
-		cout << "Name = ";
+		cout << "Name = "<< endl;
 		cin.getline(name, 100);
 		if (checkName(name)) return name;
-        cout << "Illegal input!\a\n";
+        cout << "Illegal input!" << endl;
     }
 }
 
@@ -213,10 +215,10 @@ const char* inputEmail()
 	static char email[100];
 	while(true)
 	{
-		cout << "Email = ";
+		cout << "Email = " << endl;
 		cin.getline(email, 100);
 		if (checkEmail(email)) return email;
-        cout << "Illegal input!\a\n";
+        cout << "Illegal input!" << endl;
 	}
 }
 
@@ -226,10 +228,10 @@ const char* inputID()
 	static char id[100];
 	while(true)
 	{
-		cout << "ID = ";
+		cout << "ID = " << endl;
 		cin.getline(id, 100);
 		if (checkID(id)) return id;
-        cout << "Illegal input!\a\n";
+        cout << "Illegal input!" << endl;
 	}
 }
 
@@ -239,10 +241,10 @@ int inputMark()
 	int mark;
 	while(true)
 	{
-		cout << "Mark = ";
+		cout << "Mark = " << endl;
         cin >> mark;
 		if (checkMark(mark)) return mark;
-        cout << "Illegal input!\a\n";
+        cout << "Illegal input!" << endl;
 	}
 }
 
@@ -318,12 +320,40 @@ void GradeBookHandle::verify()
     }
 }
 
+
+
+
+char* replaceSpace(char* text)
+{
+    for(int i=0; i<strlen(text); i++)
+    {
+        if(text[i] == ' ') text[i]='_';
+    }
+    return text;       
+}
+
+char* replaceUnderscore(char* text)
+{
+    for(int i=0; i<strlen(text); i++)
+    {
+        if(text[i] == '_') text[i]=' ';
+    }
+    return text;       
+}
+
+
 void GradeBookHandle::store(char* filename)
 {
-    ofstream push(filename);
+    ofstream push(filename, ios::out);
+    if(!push)
+    {
+        push << "\n";
+    }
+
+
     for(int i=0; i<nEm; i++)
     {
-        push<<list[i].getName()<<" ";
+        push<<replaceSpace((char*)list[i].getName())<<" ";
         push<<list[i].getID()<<" ";
         push<<list[i].getEmail()<<" ";
         push<<list[i].getMark(0)<<" ";
@@ -353,7 +383,7 @@ void GradeBookHandle::load(char* filename)
         pull>>marks[0];
         pull>>marks[1];
         pull>>marks[2];
-        list[counter].setName(name);
+        list[counter].setName(replaceUnderscore(name));
         list[counter].setID(id);
         list[counter].setEmail(email);
         list[counter].setMark(0, marks[0]);
@@ -361,6 +391,7 @@ void GradeBookHandle::load(char* filename)
         list[counter].setMark(2, marks[2]);
         counter++;
     }
+    nEm = counter;
 }
 
 void GradeBookHandle::uMenu()
@@ -368,20 +399,20 @@ void GradeBookHandle::uMenu()
 	char c; 
 	while(true)
 	{
-		cout << "====================\n";
-		cout << " GradeBook Database\n";
-		cout << "====================\n";
-		cout << "1. View Database\n";
-		cout << "2. Delete GradeBook\n";
-		cout << "3. Edit GradeBook\n";
-		cout << "4. Add GradeBook\n";
-		cout << "5. Validate Database\n";
-		cout << "6. Store Database\n";
-		cout << "7. Load Database\n";
-		cout << "8. Load Dummy Data\n";
-		cout << "0. Exit\n";
+		cout << "====================" << endl;
+		cout << " GradeBook Database" << endl;
+		cout << "====================" << endl;
+		cout << "1. View Database" << endl;
+		cout << "2. Delete GradeBook" << endl;
+		cout << "3. Edit GradeBook" << endl;
+		cout << "4. Add GradeBook" << endl;
+		cout << "5. Validate Database" << endl;
+		cout << "6. Store Database" << endl;
+		cout << "7. Load Database" << endl;
+		cout << "8. Load Dummy Data" << endl;
+		cout << "0. Exit" << endl;
 		cin >> c;
-		if (c!='0' && (c<'1' || c>'8')) cout << "Illegal choice!\a\n";
+		if (c!='0' && (c<'1' || c>'8')) cout << "Illegal choice!" << endl;
         if (c=='1') display();
         else if (c=='2' || c=='3')
         {
@@ -395,12 +426,12 @@ void GradeBookHandle::uMenu()
         if (c=='5') verify();
         if (c=='6' || c=='7')
         {
-            char* filename;
+            char* filename = new char[40];
             cout << "Enter Database Filename: " << endl;
             cin >> filename;
 
-            if (c=='6') store(filename);
-            if (c=='7') load(filename);
+            if (c=='6') store((char*)filename);
+            if (c=='7') load((char*)filename);
         }
         if (c=='8') populate();
         if (c=='0') return;

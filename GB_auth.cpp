@@ -22,7 +22,7 @@ int Authenticator::authenticate()
         return -1;
     }
 
-    cout<<"(Enter exit to leave) Username: ";
+    cout<<"(Enter exit to leave) Username: " << endl;
     cin>>username;
     while(strcmp(username,stored_username))
     {
@@ -33,25 +33,25 @@ int Authenticator::authenticate()
         pull>>stored_username;
         pull>>stored_password;
         if(pull.eof()){   //if it is the end of file
-            cout<<"Username does not exist. Enter Password to create account!"<<endl;
+            cout<<"Username does not exist. Enter Password to create account!" << endl;
             cin>>password;
             ofstream push("password.txt", ios_base::app);
             push << username << " " << password << "\n";
             return 1;
         }
     }
-    cout<<"Password: ";
+    cout<<"Password: " << endl;
     cin>>password;
     while(strcmp(password,stored_password)){
         cout<<"Wrong password. "<<endl;
-        cout<<"Try again: ";
+        cout<<"Try again: " << endl;
         attempts++;
         if (attempts>3){
-            cout<<"Too many attempts"<<endl;
+            cout<<"Too many attempts" << endl;
             return -1;
         }
         cin>>password;
     }
-    cout<<"Login successful."<<endl;
+    cout<<"Login successful." << endl;
     return 1;
 }
