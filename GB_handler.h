@@ -48,13 +48,13 @@ public:
 	void display(int i) const;		//display a grade book in the list
 	void delGradeBook(int i); 			//delete the i th grade book from the list
 
-	int findName(const char *nn);		//find a name from the list, -1 means not found
-	int findEmail(const char *em);	//find an email from the list, -1 means not found
-	int findID(const char *nn);		//find a student id from the list, -1 means not found
-
-	void input();			//Task 0, input grade book to the list
+	void add();			//Task 0, input grade book to the list
+	void edit(int i);			//Task 0, input grade book to the list
     void verify();         // actually Task 0
+    void populate();
 
     void load(char* filename);
     void store(char* filename);
+
+    void uMenu();
 };

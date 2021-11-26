@@ -1,5 +1,5 @@
 #include "GB_handler.h"
-#include <cstring>
+#include <string.h>
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -70,10 +70,10 @@ const int* GradeBook::getMarks() const
 //display the grade book
 void GradeBook::display() const
 {
-	cout << "|Name:  " << sName << endl;
-	cout << "|Email: " << sEmail << endl;
-	cout << "|ID:    " << sIDno << endl;
-	cout << "|Marks: " << sMarks[0] << ", " << sMarks[1] << ", " << sMarks[2] << endl;
+	cout << "|Name:   " << sName << endl;
+	cout << "|Email:  " << sEmail << endl;
+	cout << "|ID:     " << sIDno << endl;
+	cout << "|Marks:  " << sMarks[0] << ", " << sMarks[1] << ", " << sMarks[2] << endl;
 	cout << "------------------------------------------\n";
 }
 
@@ -96,38 +96,12 @@ void GradeBookHandle::display() const
 //display the i th grade book in the list
 void GradeBookHandle::display(int i) const
 {
-	cout << "------------------------------------------\n";
 	if (i<nEm)
 	{
+	    cout << "------------------------------------------\n";
+	    cout << "|Serial: " << i << endl;
 	    list[i].display();
 	}
-}
-
-//find a name from the list, -1 means not found
-int GradeBookHandle::findName(const char *nn)		
-{
-	for (int i=0; i<nEm; i++)
-		if (strcmp(list[i].getName(), nn) == 0) return i;
-
-	return -1;
-}
-
-//find an email from the list, -1 means not found
-int GradeBookHandle::findEmail(const char *em)	
-{
-	for (int i=0; i<nEm; i++)
-		if (strcmp(list[i].getEmail(), em) == 0) return i;
-
-	return -1;
-}
-
-//find a student id from the list, -1 means not found
-int GradeBookHandle::findID(const char *id)		
-{
-	for (int i=0; i<nEm; i++)
-		if (strcmp(list[i].getID(), id) == 0) return i;
-
-	return -1;
 }
 
 //delete the i th grade book from the list
@@ -272,15 +246,26 @@ int inputMark()
 	}
 }
 
-//Task 0, input grade book to the list
-void GradeBookHandle::input()
+void GradeBookHandle::add()
 {
-    //list[nEm].setName( inputName() );
-	//list[nEm].setEmail( inputEmail() );
-	//list[nEm].setID( inputID() );
-	//for (int i=0; i<3; i++) list[nEm].setMark(i, inputMark() );
-	//nEm++;
+    list[nEm].setName( inputName() );
+	list[nEm].setEmail( inputEmail() );
+	list[nEm].setID( inputID() );
+	for (int i=0; i<3; i++) list[nEm].setMark(i, inputMark() );
+	nEm++;
+}
 
+void GradeBookHandle::edit(int i)
+{
+    display(i);
+    list[i].setName( inputName() );
+	list[i].setEmail( inputEmail() );
+	list[i].setID( inputID() );
+	for (int j=0; j<3; j++) list[i].setMark(j, inputMark() );
+}
+
+void GradeBookHandle::populate()
+{
 	list[nEm].setName( "Peter Lee" );		//preset data
 	list[nEm].setEmail( "p@peter.lee" );
 	list[nEm].setID( "12345678D" );
@@ -298,7 +283,6 @@ void GradeBookHandle::input()
 	list[nEm].setID( "12345679D" );
 	list[nEm].setMark(0, 50 ); list[nEm].setMark(1, 60 ); list[nEm].setMark(2, 70 );
 	nEm++;
-
 }
 
 void GradeBookHandle::verify()
@@ -369,7 +353,6 @@ void GradeBookHandle::load(char* filename)
         pull>>marks[0];
         pull>>marks[1];
         pull>>marks[2];
-        cout << "Test" <<endl;
         list[counter].setName(name);
         list[counter].setID(id);
         list[counter].setEmail(email);
@@ -380,17 +363,46 @@ void GradeBookHandle::load(char* filename)
     }
 }
 
-char uMenu()
+void GradeBookHandle::uMenu()
 {
 	char c; 
 	while(true)
 	{
-		cout << "1. Choose name\n"
-			    "2. Choose email\n"
-				"3. Choose id\n"
-				"Your choice: ";
+		cout << "====================\n";
+		cout << " GradeBook Database\n";
+		cout << "====================\n";
+		cout << "1. View Database\n";
+		cout << "2. Delete GradeBook\n";
+		cout << "3. Edit GradeBook\n";
+		cout << "4. Add GradeBook\n";
+		cout << "5. Validate Database\n";
+		cout << "6. Store Database\n";
+		cout << "7. Load Database\n";
+		cout << "8. Load Dummy Data\n";
+		cout << "0. Exit\n";
 		cin >> c;
-		if (c<'1' || c>'3') cout << "Illegal choice!\a\n";
-		else return c;
-	}
+		if (c!='0' && (c<'1' || c>'8')) cout << "Illegal choice!\a\n";
+        if (c=='1') display();
+        else if (c=='2' || c=='3')
+        {
+            int serial;
+            cout << "Enter Serial: " << endl;
+            cin >> serial;
+            if (c=='2') delGradeBook(serial);
+            if (c=='3') edit(serial);
+        }
+        if (c=='4') add();
+        if (c=='5') verify();
+        if (c=='6' || c=='7')
+        {
+            char* filename;
+            cout << "Enter Database Filename: " << endl;
+            cin >> filename;
+
+            if (c=='6') store(filename);
+            if (c=='7') load(filename);
+        }
+        if (c=='8') populate();
+        if (c=='0') return;
+    }
 }

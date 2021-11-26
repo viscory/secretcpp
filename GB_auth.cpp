@@ -1,5 +1,5 @@
 #include "GB_auth.h"
-#include <cstring>
+#include <string.h>
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -27,7 +27,7 @@ int Authenticator::authenticate()
     while(strcmp(username,stored_username))
     {
         if (strcmp(username, "exit")==0) {
-            cout<<"Bye!";
+            cout<<"Bye!" << endl;
             return -1;
         }
         pull>>stored_username;
@@ -40,7 +40,6 @@ int Authenticator::authenticate()
             return 1;
         }
     }
-    pull.close();
     cout<<"Password: ";
     cin>>password;
     while(strcmp(password,stored_password)){
@@ -48,7 +47,7 @@ int Authenticator::authenticate()
         cout<<"Try again: ";
         attempts++;
         if (attempts>3){
-            cout<<"Too many attempts";
+            cout<<"Too many attempts"<<endl;
             return -1;
         }
         cin>>password;
