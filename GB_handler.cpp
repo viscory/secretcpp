@@ -327,7 +327,11 @@ char* replaceSpace(char* text)
 {
     for(int i=0; i<strlen(text); i++)
     {
-        if(text[i] == ' ') text[i]='_';
+        if(text[i] == ' ')
+        {
+            text[i]='_';
+            return text;
+        }
     }
     return text;       
 }
@@ -336,8 +340,13 @@ char* replaceUnderscore(char* text)
 {
     for(int i=0; i<strlen(text); i++)
     {
-        if(text[i] == '_') text[i]=' ';
-    }
+        if(text[i] == '_')
+        {
+            text[i]=' ';
+            return text;
+        
+        }
+    }    
     return text;       
 }
 

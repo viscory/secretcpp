@@ -16,11 +16,14 @@ int Authenticator::authenticate()
     char stored_username[20];
     char stored_password[20];
 
-    ifstream pull("password.txt",ios::in);
-    if (!pull) {
-        cout<<"Password File not exist!"<<endl;
-        return -1;
+    ofstream push("password.txt");
+    if(!push)
+    {
+        push<<endl;
+        push.close();
+    
     }
+    ifstream pull("password.txt",ios::in);
 
     cout<<"(Enter exit to leave) Username: " << endl;
     cin>>username;
