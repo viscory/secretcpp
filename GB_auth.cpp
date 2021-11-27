@@ -17,9 +17,8 @@ int Authenticator::authenticate()
     char stored_password[20];
 
     fstream pull("password.txt", ios::in);
-
-    cout<<"(Enter exit to leave) Username: ";
-    cin>>username;
+    cout << "(only a-zA-Z1-9) Enter exit to leave or username" << endl;
+    cin >> username;
     if (strcmp(username, "exit")==0) {
         cout<<"Bye!" << endl;
         return -1;
@@ -27,7 +26,6 @@ int Authenticator::authenticate()
     
     cout<<"Password: ";
     cin>>password;
-    
     while(strcmp(username, stored_username))
     {
         if(!pull || pull.eof()){   //if it is the end of file
