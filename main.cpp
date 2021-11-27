@@ -2,18 +2,13 @@
 #include "GB_auth.h"
 int main()
 {
-    
+    // instantiating the database and authentication class    
     GradeBookHandle gbh;
     Authenticator auth;
     int loginStatus=0;
 
-    while(true)
-    {
-        loginStatus=auth.authenticate();
-        if (loginStatus==-1) break;
-        gbh.uMenu(); 
-        break;
+    loginStatus=auth.authenticate();
+    if (loginStatus!=-1) gbh.uMenu();
 
-    }
 }
 

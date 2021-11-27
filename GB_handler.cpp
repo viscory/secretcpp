@@ -133,6 +133,7 @@ bool isNumber(char c)
 	return c>='0' && c<='9';
 }
 
+// composite function to check if name has one space and only ascii leters
 int checkName(char* name)
 {
     int len=strlen(name);
@@ -148,6 +149,7 @@ int checkName(char* name)
     return 0;
 }
 
+// function to check if the email is valid
 int checkEmail(char* email)
 {
     int len=strlen(email);
@@ -176,6 +178,7 @@ int checkEmail(char* email)
     return 0;
 }
 
+// function to check if the id is valid
 int checkID(char* id)
 {
     int len=strlen(id);
@@ -189,7 +192,7 @@ int checkID(char* id)
     return 0;
 }
 
-
+// checking if mark is within correct range
 int checkMark(int mark)
 {
     if (mark>=0 && mark <=100) return 1;
@@ -248,6 +251,7 @@ int inputMark()
 	}
 }
 
+// function to add a new record to database
 void GradeBookHandle::add()
 {
     list[nEm].setName( inputName() );
@@ -257,6 +261,7 @@ void GradeBookHandle::add()
 	nEm++;
 }
 
+// function to edit the content of a database record
 void GradeBookHandle::edit(int i)
 {
     display(i);
@@ -266,6 +271,8 @@ void GradeBookHandle::edit(int i)
 	for (int j=0; j<3; j++) list[i].setMark(j, inputMark() );
 }
 
+
+// populates database with faulty data for verify() testing
 void GradeBookHandle::populate()
 {
 	list[nEm].setName( "Peter Lee" );		//preset data
@@ -274,6 +281,7 @@ void GradeBookHandle::populate()
 	list[nEm].setMark(0, 0 ); list[nEm].setMark(1, 10 ); list[nEm].setMark(2, 20 );
 	nEm++;
 
+    // intentionally faulty data
 	list[nEm].setName( "Mary Lie" );
 	list[nEm].setEmail( "mlie.org" );
 	list[nEm].setID( "12345675D" );
@@ -287,6 +295,7 @@ void GradeBookHandle::populate()
 	nEm++;
 }
 
+// goes through database and uses input validation functions to check if valid
 void GradeBookHandle::verify()
 {
     for(int i=0; i<nEm; i++)
@@ -320,9 +329,7 @@ void GradeBookHandle::verify()
     }
 }
 
-
-
-
+// replacing spaces with underscores before storing database to file, encoding
 char* replaceSpace(char* text)
 {
     for(int i=0; i<strlen(text); i++)
@@ -336,6 +343,7 @@ char* replaceSpace(char* text)
     return text;       
 }
 
+// decoding underscores into spaces before loading up database from file
 char* replaceUnderscore(char* text)
 {
     for(int i=0; i<strlen(text); i++)
@@ -350,7 +358,7 @@ char* replaceUnderscore(char* text)
     return text;       
 }
 
-
+// simply writes the content of the database to file with some encoding
 void GradeBookHandle::store(char* filename)
 {
     ofstream push(filename, ios::out);
@@ -371,6 +379,7 @@ void GradeBookHandle::store(char* filename)
     }
 }
 
+// parses through content of the file and loads it after decoding
 void GradeBookHandle::load(char* filename)
 {
     int counter=0;
@@ -403,6 +412,7 @@ void GradeBookHandle::load(char* filename)
     nEm = counter;
 }
 
+// continuously shows menu until user wants to exit
 void GradeBookHandle::uMenu()
 {
 	char c; 

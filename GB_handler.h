@@ -44,6 +44,8 @@ public:
 
 	//~Em_Han(); destructor is not needed for array
 
+    void uMenu();
+private:
 	void display() const;			//display all grade books in the list
 	void display(int i) const;		//display a grade book in the list
 	void delGradeBook(int i); 			//delete the i th grade book from the list
@@ -56,5 +58,4 @@ public:
     void load(char* filename);
     void store(char* filename);
 
-    void uMenu();
 };
