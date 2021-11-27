@@ -408,41 +408,40 @@ void GradeBookHandle::uMenu()
 	char c; 
 	while(true)
 	{
+        cout << endl;
 		cout << "====================" << endl;
 		cout << " GradeBook Database" << endl;
 		cout << "====================" << endl;
 		cout << "1. View Database" << endl;
-		cout << "2. Delete GradeBook" << endl;
-		cout << "3. Edit GradeBook" << endl;
-		cout << "4. Add GradeBook" << endl;
-		cout << "5. Validate Database" << endl;
-		cout << "6. Store Database" << endl;
-		cout << "7. Load Database" << endl;
-		cout << "8. Load Dummy Data" << endl;
+		cout << "2. Edit GradeBook" << endl;
+		cout << "3. Add GradeBook" << endl;
+		cout << "4. Validate Database (Part 0)" << endl;
+		cout << "5. Store Database (Distinction)" << endl;
+		cout << "6. Load Database (Distinction)" << endl;
+		cout << "7. Load Dummy Data" << endl;
 		cout << "0. Exit" << endl;
 		cin >> c;
-		if (c!='0' && (c<'1' || c>'8')) cout << "Illegal choice!" << endl;
+		if (c!='0' && (c<'1' || c>'7')) cout << "Illegal choice!" << endl;
         if (c=='1') display();
-        else if (c=='2' || c=='3')
+        if (c=='2')
         {
             int serial;
             cout << "Enter Serial: " << endl;
             cin >> serial;
-            if (c=='2') delGradeBook(serial);
-            if (c=='3') edit(serial);
+            edit(serial);
         }
-        if (c=='4') add();
-        if (c=='5') verify();
-        if (c=='6' || c=='7')
+        if (c=='3') add();
+        if (c=='4') verify();
+        if (c=='5' || c=='6')
         {
             char* filename = new char[40];
             cout << "Enter Database Filename: " << endl;
             cin >> filename;
 
-            if (c=='6') store((char*)filename);
-            if (c=='7') load((char*)filename);
+            if (c=='5') store((char*)filename);
+            if (c=='6') load((char*)filename);
         }
-        if (c=='8') populate();
+        if (c=='7') populate();
         if (c=='0') return;
     }
 }
