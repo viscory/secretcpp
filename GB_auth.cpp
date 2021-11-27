@@ -16,37 +16,32 @@ int Authenticator::authenticate()
     char stored_username[20];
     char stored_password[20];
 
-    ofstream push("password.txt");
-    if(!push)
-    {
-        push<<endl;
-        push.close();
-    
-    }
-    ifstream pull("password.txt",ios::in);
+    fstream pull("password.txt", ios::in);
 
-    cout<<"(Enter exit to leave) Username: " << endl;
+    cout<<"(Enter exit to leave) Username: ";
     cin>>username;
-    while(strcmp(username,stored_username))
+    if (strcmp(username, "exit")==0) {
+        cout<<"Bye!" << endl;
+        return -1;
+    }
+    
+    cout<<"Password: ";
+    cin>>password;
+    
+    while(strcmp(username, stored_username))
     {
-        if (strcmp(username, "exit")==0) {
-            cout<<"Bye!" << endl;
-            return -1;
-        }
-        pull>>stored_username;
-        pull>>stored_password;
-        if(pull.eof()){   //if it is the end of file
-            cout<<"Username does not exist. Enter Password to create account!" << endl;
-            cin>>password;
-            ofstream push("password.txt", ios_base::app);
+        if(!pull || pull.eof()){   //if it is the end of file
+            cout<<"Username does not exist. Creating new account!" << endl;
+            pull.close();
+            fstream push("password.txt", ios_base::app);
             push << username << " " << password << "\n";
             return 1;
         }
+        pull>>stored_username;
+        pull>>stored_password;
     }
-    cout<<"Password: " << endl;
-    cin>>password;
-    while(strcmp(password,stored_password)){
-        cout<<"Wrong password. "<<endl;
+    while(strcmp(password, stored_password)){
+        cout<<"Wrong password. " << endl;
         cout<<"Try again: " << endl;
         attempts++;
         if (attempts>3){
